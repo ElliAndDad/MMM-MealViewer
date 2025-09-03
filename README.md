@@ -54,6 +54,8 @@ Add the following to your `config.js` file:
         hideTodayAfter: "14:00", // Specify the time after which to stop showing today's menu
         showBreakfast: true,  // Set to false to not show breakfast menus
         showLunch: true, // Set to false to not show lunch menus
+        showTodayOnly: true,        // set to false if you want to see every day
+        collapseEmptyMeals: true,   // hide today if no menu data
         filters: {
             breakfast: [],
             lunch: []
@@ -96,7 +98,7 @@ Add the following to your `config.js` file:
 
 1\. `updateInterval`
 
-How often to fetch new data, in milliseconds. The default is 4 hours, adjust this as you like. 
+How often to fetch new data, in milliseconds. The default is 4 hours, adjust this as you like.
 
 *Example*
 ```javascript

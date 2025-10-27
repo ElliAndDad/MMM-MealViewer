@@ -4,6 +4,7 @@ Module.register("MMM-MealViewer", {
         updateInterval: 14400000,
         startDay: 0,
         endDay: 5,
+        maxDisplayDays: null, // Set a number to limit displayed days, null for no limit
         showPastDays: false,
         hideTodayAfter: "14:00",
         showBreakfast: true,
@@ -104,8 +105,14 @@ Module.register("MMM-MealViewer", {
         contentWrapper.className = "module-content";
 
         let hasContent = false;
+        let daysShown = 0;
 
-        this.mealData.forEach(day => {
+        // Filter to show only maxDisplayDays if set
+        const displayData = this.config.maxDisplayDays 
+            ? this.mealData.slice(0, this.config.maxDisplayDays) 
+            : this.mealData;
+
+        displayData.forEach(day => {
             const hasBreakfast = day.breakfast && day.breakfast.trim() !== "";
             const hasLunch = day.lunch && day.lunch.trim() !== "";
 

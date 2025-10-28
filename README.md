@@ -1,6 +1,8 @@
 # MMM-MealViewer
 
-A MagicMirror module for displaying school breakfast and lunch menus from MealViewer. You can check to see if your school uses MealViewer [here](https://schools.mealviewer.com/). **Note - if there are no valid menus for the current week (ie- school is out) the module will not display.*
+A MagicMirror module for displaying school breakfast and lunch menus from MealViewer. You can check to see if your school uses MealViewer [here](https://schools.mealviewer.com/). 
+
+**Note - if there are no valid menus for the current week (ie- school is out) the module will not display.*
 
 - [Screenshots](#screenshots)
 - [Installation](#installation)
@@ -57,13 +59,14 @@ Add the following to your `config.js` file:
         schoolId: "YourSchoolId",
         updateInterval: 14400000, // 4 hours, adjust as needed
         showTodayOnly: false, // set to true if you want to see only today
-        startDay: 1, // 0 = Sunday, 1 = Monday, ..., 6 = Saturday (Ignored if showTodayOnly is set to true)
-        endDay: 5, // 0 = Sunday, 1 = Monday, ..., 6 = Saturday (Ignored if showTodayOnly is set to true)
+        startDay: 0, // 0 = Sunday, 1 = Monday, ..., 6 = Saturday (Ignored if showTodayOnly = true)
+        endDay: 5, // 0 = Sunday, 1 = Monday, ..., 6 = Saturday (Ignored if showTodayOnly = true)
+        maxDisplayDays: null, // Set a number of days to display, null = no limit (Ignored if showTodayOnly = true)
         showPastDays: false, // Set to true to show previous days menus
         hideTodayAfter: "14:00", // Specify the time after which to stop showing today's menu
-        showBreakfast: true,  // Set to false to not show breakfast menus
+        showBreakfast: true, // Set to false to not show breakfast menus
         showLunch: true, // Set to false to not show lunch menus
-        collapseEmptyMeals: true,   // hide today if no menu data
+        collapseEmptyMeals: true, // hide days with no menu data
         filters: {
             breakfast: [],
             lunch: []
@@ -115,7 +118,7 @@ How often to fetch new data, in milliseconds. The default is 4 hours, adjust thi
 
 2\. `showTodayOnly`
 
-To show only today's menu, set to `true`.
+To show only today's menu, set to `true`. When set to `true`, `startDay`, `endDay` and `maxDisplayDays` settings are ignored.
 
 *Example*
 ```javascript
@@ -130,21 +133,32 @@ To show only today's menu, set to `true`.
 
 *Example*
 ```javascript
-startDay: 0, // Start from Sunday
-endDay: 6,   // End on Saturday
+     startDay: 0, // Start from Sunday
+     endDay: 6,   // End on Saturday
 ```
 
-4\. `showPastDays`
+4\. `maxDisplayDays`
+
+Set a maximum number of days to display.
+
+*Example*
+```javascript
+     startDay: 1, // start on Monday
+     endDay: 5,  // end on Friday
+     maxDisplayDays: 3, // display only 3 days of data at a time. On Monday it would show Monday, Tuesday, Wednesday data
+```
+
+5\. `showPastDays`
 
 - Whether to show menus for days that have already passed.
 - Default: false
 
 *Example*
 ```javascript
-showPastDays: true, // Show past days' menus
+     showPastDays: true, // Show past days' menus
 ```
 
-5\. `hideTodayAfter`
+6\. `hideTodayAfter`
 
 - Time after which to hide today's menu.
 - Format: 24-hour time as a string, or "never" to always show today's menu.
@@ -152,29 +166,18 @@ showPastDays: true, // Show past days' menus
 
 *Example*
 ```javascript
-hideTodayAfter: "never", // Show today's menu until the end of the day
+     hideTodayAfter: "never", // Show today's menu until the end of the day
 ```
 
-6\. `showBreakfast` and `showLunch`
+7\. `showBreakfast` and `showLunch`
 
 - Whether to display breakfast and lunch menus.
 - Default: true for both
 
 *Example*
 ```javascript
-showBreakfast: false, // Don't show breakfast menu
-showLunch: true,      // Show lunch menu
-```
-
-6\. `maxDisplayDays`
-
-- The maximum number of days you want to display
-
-*Example*
-```javascript
-startDay: 1, // start on Monday
-endDat: 5,  // end of Friday
-maxDisplayDays: 3, // displays only 3 days of data at a time. On Monday it would so Monday, Tuesday, Wednesday data
+     showBreakfast: false, // Don't show breakfast menu
+     showLunch: true,      // Show lunch menu
 ```
 
 ## Filters
@@ -255,12 +258,14 @@ Here's an example configuration for displaying menus from two different schools:
         schoolId: "YourSchoolId1",
         updateInterval: 14400000, // 4 hours, adjust as needed
         showTodayOnly: false, // set to true if you want to see only today
-        startDay: 1, // 0 = Sunday, 1 = Monday, ..., 6 = Saturday (Ignored if showTodayOnly is set to true)
-        endDay: 5, // 0 = Sunday, 1 = Monday, ..., 6 = Saturday (Ignored if showTodayOnly is set to true)
+        startDay: 0, // 0 = Sunday, 1 = Monday, ..., 6 = Saturday (Ignored if showTodayOnly = true)
+        endDay: 5, // 0 = Sunday, 1 = Monday, ..., 6 = Saturday (Ignored if showTodayOnly = true)
+        maxDisplayDays: null, // Set a number of days to display, null = no limit (Ignored if showTodayOnly = true)
         showPastDays: false, // Set to true to show previous days menus
         hideTodayAfter: "14:00", // Specify the time after which to stop showing today's menu
-        showBreakfast: true,  // Set to false to not show breakfast menus
+        showBreakfast: true, // Set to false to not show breakfast menus
         showLunch: true, // Set to false to not show lunch menus
+        collapseEmptyMeals: true, // hide days with no menu data
         filters: {
             breakfast: [],
             lunch: []
@@ -278,7 +283,7 @@ Here's an example configuration for displaying menus from two different schools:
             lunch: []
         }
     }
-},
+}
 {
     module: "MMM-MealViewer",
     position: "top_left",
@@ -286,12 +291,14 @@ Here's an example configuration for displaying menus from two different schools:
         schoolId: "YourSchoolId2",
         updateInterval: 14400000, // 4 hours, adjust as needed
         showTodayOnly: false, // set to true if you want to see only today
-        startDay: 1, // 0 = Sunday, 1 = Monday, ..., 6 = Saturday (Ignored if showTodayOnly is set to true)
-        endDay: 5, // 0 = Sunday, 1 = Monday, ..., 6 = Saturday (Ignored if showTodayOnly is set to true)
+        startDay: 0, // 0 = Sunday, 1 = Monday, ..., 6 = Saturday (Ignored if showTodayOnly = true)
+        endDay: 5, // 0 = Sunday, 1 = Monday, ..., 6 = Saturday (Ignored if showTodayOnly = true)
+        maxDisplayDays: null, // Set a number of days to display, null = no limit (Ignored if showTodayOnly = true)
         showPastDays: false, // Set to true to show previous days menus
         hideTodayAfter: "14:00", // Specify the time after which to stop showing today's menu
-        showBreakfast: true,  // Set to false to not show breakfast menus
+        showBreakfast: true, // Set to false to not show breakfast menus
         showLunch: true, // Set to false to not show lunch menus
+        collapseEmptyMeals: true, // hide days with no menu data
         filters: {
             breakfast: [],
             lunch: []

@@ -1,16 +1,16 @@
 Module.register("MMM-MealViewer", {
     defaults: {
         schoolId: "",
-        updateInterval: 14400000,
-        showTodayOnly: false,
-        startDay: 0,
-        endDay: 5,
-        maxDisplayDays: null, // Set a number to limit displayed days, null for no limit
-        showPastDays: false,
-        hideTodayAfter: "14:00",
-        showBreakfast: true,
-        showLunch: true,
-        collapseEmptyMeals: true,
+        updateInterval: 14400000, // 4 hours, adjust as needed
+        showTodayOnly: false, // set to true if you want to see only today
+        startDay: 0, // 0 = Sunday, 1 = Monday, ..., 6 = Saturday (Ignored if showTodayOnly = true)
+        endDay: 5, // 0 = Sunday, 1 = Monday, ..., 6 = Saturday (Ignored if showTodayOnly = true)
+        maxDisplayDays: null, // Set a number of days to display, null = no limit (Ignored if showTodayOnly = true)
+        showPastDays: false, // Set to true to show previous days menus
+        hideTodayAfter: "14:00", // Specify the time after which to stop showing today's menu
+        showBreakfast: true, // Set to false to not show breakfast menus
+        showLunch: true, // Set to false to not show lunch menus
+        collapseEmptyMeals: true, // hide days with no menu data
         testMode: false,
         testDate: null, // Format: "YYYY-MM-DD"
         filters: {

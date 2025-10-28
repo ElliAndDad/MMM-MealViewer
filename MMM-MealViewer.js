@@ -2,13 +2,13 @@ Module.register("MMM-MealViewer", {
     defaults: {
         schoolId: "",
         updateInterval: 14400000,
+        showTodayOnly: false,
         startDay: 0,
         endDay: 5,
         showPastDays: false,
         hideTodayAfter: "14:00",
         showBreakfast: true,
         showLunch: true,
-        showTodayOnly: true,
         collapseEmptyMeals: true,
         testMode: false,
         testDate: null, // Format: "YYYY-MM-DD"

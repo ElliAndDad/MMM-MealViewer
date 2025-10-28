@@ -11,7 +11,7 @@ A MagicMirror module for displaying school breakfast and lunch menus from MealVi
     - [Configuration for Multiple School Menus](#configuration-for-multiple-school-menus)
 
 
-## Screenshot
+## Screenshots
 
 Single instance:
 
@@ -25,17 +25,25 @@ Multiple instances:
 
 1\. Navigate to your MagicMirror's `modules` directory:
 
-`cd ~/MagicMirror/modules/`
+```bash
+cd ~/MagicMirror/modules/
+```
 
 2\. Clone this repository:
 
-`git clone https://github.com/ElliAndDad/MMM-MealViewer.git`
+```bash
+git clone https://github.com/ElliAndDad/MMM-MealViewer.git
+```
 
 3\. Install dependencies:
 
-`cd MMM-MealViewer`
+```bash
+cd MMM-MealViewer
+```
 
-`npm install`
+```bash
+npm install
+```
 
 ## Configuration
 
@@ -48,13 +56,13 @@ Add the following to your `config.js` file:
     config: {
         schoolId: "YourSchoolId",
         updateInterval: 14400000, // 4 hours, adjust as needed
-        startDay: 1, // 0 = Sunday, 1 = Monday, ..., 6 = Saturday
-        endDay: 5, // 0 = Sunday, 1 = Monday, ..., 6 = Saturday
+        showTodayOnly: false, // set to true if you want to see only today
+        startDay: 1, // 0 = Sunday, 1 = Monday, ..., 6 = Saturday (Ignored if showTodayOnly is set to true)
+        endDay: 5, // 0 = Sunday, 1 = Monday, ..., 6 = Saturday (Ignored if showTodayOnly is set to true)
         showPastDays: false, // Set to true to show previous days menus
         hideTodayAfter: "14:00", // Specify the time after which to stop showing today's menu
         showBreakfast: true,  // Set to false to not show breakfast menus
         showLunch: true, // Set to false to not show lunch menus
-        showTodayOnly: true,        // set to false if you want to see every day
         collapseEmptyMeals: true,   // hide today if no menu data
         filters: {
             breakfast: [],
@@ -105,7 +113,16 @@ How often to fetch new data, in milliseconds. The default is 4 hours, adjust thi
      updateInterval: 3600000, // 1 hour
 ```   
 
-2\. `startDay` and `endDay`
+2\. `showTodayOnly`
+
+To show only today's menu, set to `true`.
+
+*Example*
+```javascript
+     showTodayOnly: true,
+```  
+
+3\. `startDay` and `endDay`
 
 - Define the range of days to display in the menu.
 - Values: 0 (Sunday) to 6 (Saturday)
@@ -117,7 +134,7 @@ startDay: 0, // Start from Sunday
 endDay: 6,   // End on Saturday
 ```
 
-3\. `showPastDays`
+4\. `showPastDays`
 
 - Whether to show menus for days that have already passed.
 - Default: false
@@ -127,7 +144,7 @@ endDay: 6,   // End on Saturday
 showPastDays: true, // Show past days' menus
 ```
 
-4\. `hideTodayAfter`
+5\. `hideTodayAfter`
 
 - Time after which to hide today's menu.
 - Format: 24-hour time as a string, or "never" to always show today's menu.
@@ -138,7 +155,7 @@ showPastDays: true, // Show past days' menus
 hideTodayAfter: "never", // Show today's menu until the end of the day
 ```
 
-5\. `showBreakfast` and `showLunch`
+6\. `showBreakfast` and `showLunch`
 
 - Whether to display breakfast and lunch menus.
 - Default: true for both
@@ -226,8 +243,9 @@ Here's an example configuration for displaying menus from two different schools:
     config: {
         schoolId: "YourSchoolId1",
         updateInterval: 14400000, // 4 hours, adjust as needed
-        startDay: 1, // 0 = Sunday, 1 = Monday, ..., 6 = Saturday
-        endDay: 5, // 0 = Sunday, 1 = Monday, ..., 6 = Saturday
+        showTodayOnly: false, // set to true if you want to see only today
+        startDay: 1, // 0 = Sunday, 1 = Monday, ..., 6 = Saturday (Ignored if showTodayOnly is set to true)
+        endDay: 5, // 0 = Sunday, 1 = Monday, ..., 6 = Saturday (Ignored if showTodayOnly is set to true)
         showPastDays: false, // Set to true to show previous days menus
         hideTodayAfter: "14:00", // Specify the time after which to stop showing today's menu
         showBreakfast: true,  // Set to false to not show breakfast menus
@@ -256,8 +274,9 @@ Here's an example configuration for displaying menus from two different schools:
     config: {
         schoolId: "YourSchoolId2",
         updateInterval: 14400000, // 4 hours, adjust as needed
-        startDay: 1, // 0 = Sunday, 1 = Monday, ..., 6 = Saturday
-        endDay: 5, // 0 = Sunday, 1 = Monday, ..., 6 = Saturday
+        showTodayOnly: false, // set to true if you want to see only today
+        startDay: 1, // 0 = Sunday, 1 = Monday, ..., 6 = Saturday (Ignored if showTodayOnly is set to true)
+        endDay: 5, // 0 = Sunday, 1 = Monday, ..., 6 = Saturday (Ignored if showTodayOnly is set to true)
         showPastDays: false, // Set to true to show previous days menus
         hideTodayAfter: "14:00", // Specify the time after which to stop showing today's menu
         showBreakfast: true,  // Set to false to not show breakfast menus

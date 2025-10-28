@@ -5,6 +5,7 @@ Module.register("MMM-MealViewer", {
         showTodayOnly: false,
         startDay: 0,
         endDay: 5,
+        maxDisplayDays: null, // Set a number to limit displayed days, null for no limit
         showPastDays: false,
         hideTodayAfter: "14:00",
         showBreakfast: true,
@@ -114,6 +115,7 @@ Module.register("MMM-MealViewer", {
         contentWrapper.className = "module-content";
 
         let hasContent = false;
+        let daysShown = 0;
 
         let daysToRender = Array.isArray(this.mealData) ? this.mealData.slice() : [];
 
@@ -172,7 +174,12 @@ Module.register("MMM-MealViewer", {
         }
         // --- END TODAY-ONLY FILTER ---
 
-
+        // --- MAX DISPLAY DAYS FILTER (from PR#2) ---
+        // Apply maxDisplayDays limit if configured
+        if (this.config.maxDisplayDays && this.config.maxDisplayDays > 0) {
+            daysToRender = daysToRender.slice(0, this.config.maxDisplayDays);
+        }
+        // --- END MAX DISPLAY DAYS FILTER ---
 
         daysToRender.forEach(day => {
             const hasBreakfast = day.breakfast && day.breakfast.trim() !== "";

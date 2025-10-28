@@ -51,3 +51,13 @@
     font-weight: bold;
     color: var(--color-text-bright, #fff);
 }
+.MMM-MealViewer .day-menu {
+  margin-bottom: 6px;
+}
+.MMM-MealViewer .day-header {
+  font-size: 1.1rem;
+  margin-bottom: 4px;
+}
+.MMM-MealViewer .meal-line {
+  margin: 2px 0;
+}

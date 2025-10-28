@@ -2,6 +2,7 @@ Module.register("MMM-MealViewer", {
     defaults: {
         schoolId: "",
         updateInterval: 14400000,
+        showTodayOnly: false,
         startDay: 0,
         endDay: 5,
         maxDisplayDays: null, // Set a number to limit displayed days, null for no limit
@@ -9,6 +10,7 @@ Module.register("MMM-MealViewer", {
         hideTodayAfter: "14:00",
         showBreakfast: true,
         showLunch: true,
+        collapseEmptyMeals: true,
         testMode: false,
         testDate: null, // Format: "YYYY-MM-DD"
         filters: {
@@ -28,6 +30,14 @@ Module.register("MMM-MealViewer", {
             lunch: []
         }
     },
+
+    pad(n) { return String(n).padStart(2, "0"); },
+    ymd(d) { return `${d.getFullYear()}-${this.pad(d.getMonth()+1)}-${this.pad(d.getDate())}`; },
+    toLocalYMD(input) {
+      const d = (input instanceof Date) ? input : new Date(input);
+      return this.ymd(d);
+    },
+
 
     start: function () {
         this.mealData = null;
@@ -107,12 +117,71 @@ Module.register("MMM-MealViewer", {
         let hasContent = false;
         let daysShown = 0;
 
-        // Filter to show only maxDisplayDays if set
-        const displayData = this.config.maxDisplayDays 
-            ? this.mealData.slice(0, this.config.maxDisplayDays) 
-            : this.mealData;
+        let daysToRender = Array.isArray(this.mealData) ? this.mealData.slice() : [];
 
-        displayData.forEach(day => {
+        // --- TODAY-ONLY FILTER (matches "TUESDAY, SEPTEMBER 2") ---
+        if (this.config.showTodayOnly) {
+          const now = new Date();
+
+          // Build candidates in the SAME STYLE the module displays (uppercase, US-style, no year)
+          const weekday = now.toLocaleDateString(undefined, { weekday: "long" }).toUpperCase();   // TUESDAY
+          const month   = now.toLocaleDateString(undefined, { month: "long" }).toUpperCase();     // SEPTEMBER
+          const dayNum  = String(now.getDate());                                                  // 2
+          const year    = String(now.getFullYear());
+
+          const TODAY_NO_YEAR = `${weekday}, ${month} ${dayNum}`;         // "TUESDAY, SEPTEMBER 2"
+          const TODAY_WITH_YR = `${TODAY_NO_YEAR}, ${year}`;              // "TUESDAY, SEPTEMBER 2, 2025"
+          const TODAY_ALT     = `${month} ${dayNum}`;                     // "SEPTEMBER 2" (in case module omits weekday)
+
+          const normalize = (s) =>
+            String(s || "")
+              .toUpperCase()
+              .replace(/\s+/g, " ")
+              .trim();
+
+          const candidates = [TODAY_NO_YEAR, TODAY_WITH_YR, TODAY_ALT].map(normalize);
+
+          // Keep only entries whose .date looks like "today" in that style
+          daysToRender = daysToRender.filter((d) => {
+            const ds = normalize(d.date);
+            return candidates.some((c) => ds === c || ds.includes(c));
+          });
+
+          // respect hideTodayAfter (only if we matched a "today" entry)
+          if (daysToRender.length && this.config.hideTodayAfter && this.config.hideTodayAfter !== "never") {
+            const [hh, mm = "0"] = String(this.config.hideTodayAfter).split(":");
+            const cutoff = new Date(now);
+            cutoff.setHours(parseInt(hh, 10) || 0, parseInt(mm, 10) || 0, 0, 0);
+            if (now >= cutoff) daysToRender = [];
+          }
+
+          // collapseEmptyMeals (strings for this module)
+          if (this.config.collapseEmptyMeals && daysToRender.length) {
+            daysToRender = daysToRender.filter((d) => {
+              const hasBreakfast = this.config.showBreakfast && typeof d.breakfast === "string" && d.breakfast.trim() !== "";
+              const hasLunch     = this.config.showLunch     && typeof d.lunch     === "string" && d.lunch.trim()     !== "";
+              return hasBreakfast || hasLunch;
+            });
+          }
+
+          if (!daysToRender.length) {
+            const msg = document.createElement("div");
+            msg.className = "dimmed small";
+            msg.textContent = "No menu for today.";
+            wrapper.appendChild(msg);
+            return wrapper;
+          }
+        }
+        // --- END TODAY-ONLY FILTER ---
+
+        // --- MAX DISPLAY DAYS FILTER (from PR#2) ---
+        // Apply maxDisplayDays limit if configured
+        if (this.config.maxDisplayDays && this.config.maxDisplayDays > 0) {
+            daysToRender = daysToRender.slice(0, this.config.maxDisplayDays);
+        }
+        // --- END MAX DISPLAY DAYS FILTER ---
+
+        daysToRender.forEach(day => {
             const hasBreakfast = day.breakfast && day.breakfast.trim() !== "";
             const hasLunch = day.lunch && day.lunch.trim() !== "";
 

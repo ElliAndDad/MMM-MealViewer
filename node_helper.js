@@ -184,10 +184,18 @@ module.exports = NodeHelper.create({
                         console.log(`Processing menu block: ${block.blockName}`);
                         if (block.cafeteriaLineList && block.cafeteriaLineList.data && block.cafeteriaLineList.data[0]) {
                             const items = block.cafeteriaLineList.data[0].foodItemList.data;
-                            const mealType = block.blockName.toLowerCase();
+                            const blockNameLower = block.blockName.toLowerCase();
+                            
+                            // Check if the block name contains "breakfast" or "lunch" rather than exact match
+                            let mealType = null;
+                            if (blockNameLower.includes('breakfast')) {
+                                mealType = 'breakfast';
+                            } else if (blockNameLower.includes('lunch')) {
+                                mealType = 'lunch';
+                            }
 
                             console.log(`Number of items before filtering: ${items.length}`);
-                            const filteredItems = this.filterMealItems(items, mealType, filters, itemTypeFilters, exactNameFilters, startsWithFilters);
+                            const filteredItems = this.filterMealItems(items, mealType || blockNameLower, filters, itemTypeFilters, exactNameFilters, startsWithFilters);
                             console.log(`Number of items after filtering: ${filteredItems.length}`);
 
                             if (mealType === 'breakfast' && showBreakfast) {
@@ -226,6 +234,12 @@ module.exports = NodeHelper.create({
 
     filterMealItems: function (items, mealType, filters, itemTypeFilters, exactNameFilters, startsWithFilters) {
         return items.filter(item => {
+            // Only apply filters if mealType is 'breakfast' or 'lunch'
+            if (mealType !== 'breakfast' && mealType !== 'lunch') {
+                // If it's not a recognized meal type (like snacks), return all items unfiltered
+                return true;
+            }
+            
             const mealFilters = filters[mealType] || [];
             const mealItemTypeFilters = itemTypeFilters[mealType] || [];
             const mealExactNameFilters = exactNameFilters[mealType] || [];

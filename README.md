@@ -67,6 +67,7 @@ Add the following to your `config.js` file:
         showBreakfast: true, // Set to false to not show breakfast menus
         showLunch: true, // Set to false to not show lunch menus
         collapseEmptyMeals: true, // hide days with no menu data
+        lookAhead: false, // Set to true to show next week's menu when the current week ends
         filters: {
             breakfast: [],
             lunch: []
@@ -180,6 +181,17 @@ Set a maximum number of days to display.
      showLunch: true,      // Show lunch menu
 ```
 
+8\. `lookAhead`
+
+- When enabled, automatically shows next week's menu starting on the last school day of the week (e.g., Friday for a Mon-Fri schedule). This is useful for weekend meal planning.
+- When disabled, the module shows the current week's menu until the week ends, then displays nothing on weekends.
+- Default: false
+
+*Example*
+```javascript
+     lookAhead: true, // Enable automatic look-ahead to next week
+```
+
 ## Filters
 
 This module offers four types of filters to remove menu items you don't want to display. Each filter type can be applied separately to breakfast and/or lunch menus. For help with filtering items or categories, uncomment lines 51 and 66 in `node_helper.js`, this will write `parsedMealData.json` and `rawMealData.json` files to your `MMM-MealViewer` folder when you run the module. You can then search the data in these files to find `item_Type`, `item_name`, etc that you want to remove.
@@ -266,6 +278,7 @@ Here's an example configuration for displaying menus from two different schools:
         showBreakfast: true, // Set to false to not show breakfast menus
         showLunch: true, // Set to false to not show lunch menus
         collapseEmptyMeals: true, // hide days with no menu data
+        lookAhead: false, // Set to true to show next week's menu when the current week ends
         filters: {
             breakfast: [],
             lunch: []
@@ -299,6 +312,7 @@ Here's an example configuration for displaying menus from two different schools:
         showBreakfast: true, // Set to false to not show breakfast menus
         showLunch: true, // Set to false to not show lunch menus
         collapseEmptyMeals: true, // hide days with no menu data
+        lookAhead: false, // Set to true to show next week's menu when the current week ends
         filters: {
             breakfast: [],
             lunch: []

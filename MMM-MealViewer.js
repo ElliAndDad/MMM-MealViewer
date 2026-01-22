@@ -11,6 +11,7 @@ Module.register("MMM-MealViewer", {
         showBreakfast: true, // Set to false to not show breakfast menus
         showLunch: true, // Set to false to not show lunch menus
         collapseEmptyMeals: true, // hide days with no menu data
+        lookAhead: false, // Set to true to show next week's menu when the current week ends
         testMode: false,
         testDate: null, // Format: "YYYY-MM-DD"
         filters: {
@@ -63,6 +64,7 @@ Module.register("MMM-MealViewer", {
             hideTodayAfter: this.config.hideTodayAfter,
             showBreakfast: this.config.showBreakfast,
             showLunch: this.config.showLunch,
+            lookAhead: this.config.lookAhead,
             testMode: this.config.testMode,
             testDate: this.config.testDate
         });

@@ -93,48 +93,61 @@ module.exports = NodeHelper.create({
         }
     },
 
-    getDateRange: function (startDay, endDay, testMode = false, testDate = null) {
-        let today;
+getDateRange: function (startDay, endDay, testMode = false, testDate = null) {
+    let today;
 
-        if (testMode && testDate) {
-            const [year, month, day] = testDate.split('-').map(Number);
-            today = new Date(year, month - 1, day);
-            console.log(`Using test date (local timezone): ${today.toLocaleString()}`);
-        } else {
-            today = new Date();
-        }
+    if (testMode && testDate) {
+        const [year, month, day] = testDate.split('-').map(Number);
+        today = new Date(year, month - 1, day);
+        console.log(`Using test date (local timezone): ${today.toLocaleString()}`);
+    } else {
+        today = new Date();
+    }
 
-        const currentDay = today.getDay();
-        console.log(`Current day of week: ${currentDay}`);
+    const currentDay = today.getDay();
+    console.log(`Current day of week: ${currentDay}`);
 
-        // Calculate the date for the week's start
-        const startDate = new Date(today);
-        const daysToSubtract = ((currentDay - startDay + 7) % 7);
-        startDate.setDate(today.getDate() - daysToSubtract);
+    // Calculate the date for the week's start
+    const startDate = new Date(today);
+    const daysToSubtract = ((currentDay - startDay + 7) % 7);
+    startDate.setDate(today.getDate() - daysToSubtract);
 
-        console.log(`Days to subtract: ${daysToSubtract}`);
-        console.log(`Initial start date: ${startDate.toLocaleString()}`);
+    console.log(`Days to subtract: ${daysToSubtract}`);
+    console.log(`Initial start date: ${startDate.toLocaleString()}`);
 
-        // Calculate the end date
-        const endDate = new Date(startDate);
-        const daysInRange = (endDay - startDay + 7) % 7 + 1;
-        endDate.setDate(startDate.getDate() + daysInRange - 1);
+    // Calculate the end date
+    const endDate = new Date(startDate);
+    const daysInRange = (endDay - startDay + 7) % 7 + 1;
+    endDate.setDate(startDate.getDate() + daysInRange - 1);
 
-        console.log(`Final start date: ${startDate.toLocaleString()}`);
-        console.log(`Final end date: ${endDate.toLocaleString()}`);
+    // ------------------------------------------------------------
+    // LOOK-AHEAD LOGIC
+    // If today is on or after the trigger day (Friday for Mon–Fri),
+    // shift the entire range forward by one week
+    // ------------------------------------------------------------
+    const lookAheadTriggerDay = (startDay + 4) % 7;
 
-        const formatDate = (date) => {
-            const year = date.getFullYear();
-            const month = String(date.getMonth() + 1).padStart(2, '0');
-            const day = String(date.getDate()).padStart(2, '0');
-            return `${month}-${day}-${year}`;
-        };
+    if (currentDay >= lookAheadTriggerDay) {
+        console.log("Look-ahead condition met — shifting range to next week");
+        startDate.setDate(startDate.getDate() + 7);
+        endDate.setDate(endDate.getDate() + 7);
+    }
 
-        return {
-            start: formatDate(startDate),
-            end: formatDate(endDate)
-        };
-    },
+    console.log(`Final start date: ${startDate.toLocaleString()}`);
+    console.log(`Final end date: ${endDate.toLocaleString()}`);
+
+    const formatDate = (date) => {
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const day = String(date.getDate()).padStart(2, '0');
+        return `${month}-${day}-${year}`;
+    };
+
+    return {
+        start: formatDate(startDate),
+        end: formatDate(endDate)
+    };
+},
 
     parseMealData: function (jsonData, filters, itemTypeFilters, exactNameFilters, startsWithFilters, showPastDays, hideTodayAfter, showBreakfast, showLunch, testMode = false, testDate = null) {
         const mealData = [];

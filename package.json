@@ -21,7 +21,7 @@
     },
     "homepage": "https://github.com/dadAndEl/MMM-MealViewer/#readme",
     "dependencies": {
-        "axios": "^1.7.7"
+        "axios": "^1.13.2"
     },
     "engines": {
         "node": ">=14.0.0"

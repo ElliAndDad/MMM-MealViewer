@@ -39,7 +39,7 @@ module.exports = NodeHelper.create({
         }
 
         this.fetchingData[identifier] = true;
-        const dateRange = this.getDateRange(startDay, endDay, lookAhead, testMode, testDate);
+        const dateRange = this.getDateRange(startDay, endDay, lookAhead, hideTodayAfter, testMode, testDate);
         const url = `https://api.mealviewer.com/api/v4/school/${schoolId}/${dateRange.start}/${dateRange.end}/`;
 
         console.log(`Test mode: ${testMode}, Test date: ${testDate}`);
@@ -94,7 +94,7 @@ module.exports = NodeHelper.create({
         }
     },
 
-    getDateRange: function (startDay, endDay, lookAhead = false, testMode = false, testDate = null) {
+    getDateRange: function (startDay, endDay, lookAhead = false, hideTodayAfter = "14:00", testMode = false, testDate = null) {
         let today;
 
         if (testMode && testDate) {
@@ -123,13 +123,35 @@ module.exports = NodeHelper.create({
 
         // ------------------------------------------------------------
         // LOOK-AHEAD LOGIC
-        // If enabled and today is on or after the trigger day (Friday for Mon–Fri),
-        // shift the entire range forward by one week
+        // If enabled, shift to next week when:
+        // - Current day is after endDay (e.g., Saturday when endDay is Friday)
+        // - Current day is before startDay (e.g., Sunday when startDay is Monday)
+        // - Current day is endDay AND we're past hideTodayAfter time
         // ------------------------------------------------------------
         if (lookAhead) {
-            const lookAheadTriggerDay = (startDay + 4) % 7;
+            let shouldShift = false;
 
-            if (currentDay >= lookAheadTriggerDay) {
+            // After school week ends (e.g., Saturday when endDay is Friday)
+            if (currentDay > endDay) {
+                shouldShift = true;
+                console.log("Look-ahead: Current day is after endDay");
+            }
+            // Before start of school week (e.g., Sunday when startDay is Monday)
+            else if (currentDay < startDay) {
+                shouldShift = true;
+                console.log("Look-ahead: Current day is before startDay");
+            }
+            // On endDay (e.g., Friday), check if we're past hideTodayAfter time
+            else if (currentDay === endDay && hideTodayAfter && hideTodayAfter.toLowerCase() !== "never") {
+                const [hideHour, hideMinute = 0] = hideTodayAfter.split(':').map(Number);
+                const now = testMode && testDate ? today : new Date();
+                if (now.getHours() > hideHour || (now.getHours() === hideHour && now.getMinutes() >= hideMinute)) {
+                    shouldShift = true;
+                    console.log("Look-ahead: On endDay and past hideTodayAfter time");
+                }
+            }
+
+            if (shouldShift) {
                 console.log("Look-ahead condition met — shifting range to next week");
                 startDate.setDate(startDate.getDate() + 7);
                 endDate.setDate(endDate.getDate() + 7);

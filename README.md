@@ -6,22 +6,24 @@ A MagicMirror module for displaying school breakfast and lunch menus from MealVi
 
 - [Screenshots](#screenshots)
 - [Installation](#installation)
+- [Update](#update)
 - [Configuration](#configuration)
     - [Required Configuration](#required-configuration)
     - [Optional Configuration](#optional-configuration)
     - [Filters](#filters)
     - [Configuration for Multiple School Menus](#configuration-for-multiple-school-menus)
+- [Responsive Scaling](#responsive-scaling) *(new in v1.1.0)*
 
 
 ## Screenshots
 
-Single instance:
+### Single instance
 
-<img src="screenshots/single-instance.png" />
+<img src="screenshots/single.png" />
 
-Multiple instances:
+### Multiple instances
 
-<img src="screenshots/multiple-instance.png" />
+<img src="screenshots/multiple.png" />
 
 ## Installation
 
@@ -37,15 +39,25 @@ cd ~/MagicMirror/modules/
 git clone https://github.com/ElliAndDad/MMM-MealViewer.git
 ```
 
-3\. Install dependencies:
+That's it! No additional dependencies required.
+
+## Update
+
+To update the module to the latest version:
+
+1\. Navigate to the module folder:
 
 ```bash
-cd MMM-MealViewer
+cd ~/MagicMirror/modules/MMM-MealViewer
 ```
 
+2\. Pull the latest changes:
+
 ```bash
-npm install
+git pull
 ```
+
+3\. Restart MagicMirror.
 
 ## Configuration
 
@@ -183,8 +195,8 @@ Set a maximum number of days to display.
 
 8\. `lookAhead`
 
-- When enabled, automatically shows next week's menu starting on the last school day of the week (e.g., Friday for a Mon-Fri schedule). This is useful for weekend meal planning.
-- When disabled, the module shows the current week's menu until the week ends, then displays nothing on weekends.
+- When enabled, automatically shows next week's menu starting on `endDay` after `hideTodayAfter` time, and continues through any days before `startDay`. This is useful for weekend meal planning.
+- When disabled, the module shows the current week's menu until the week ends.
 - Default: false
 
 *Example*
@@ -268,69 +280,66 @@ Here's an example configuration for displaying menus from two different schools:
     position: "top_left",
     config: {
         schoolId: "YourSchoolId1",
-        updateInterval: 14400000, // 4 hours, adjust as needed
-        showTodayOnly: false, // set to true if you want to see only today
-        startDay: 0, // 0 = Sunday, 1 = Monday, ..., 6 = Saturday (Ignored if showTodayOnly = true)
-        endDay: 5, // 0 = Sunday, 1 = Monday, ..., 6 = Saturday (Ignored if showTodayOnly = true)
-        maxDisplayDays: null, // Set a number of days to display, null = no limit (Ignored if showTodayOnly = true)
-        showPastDays: false, // Set to true to show previous days menus
-        hideTodayAfter: "14:00", // Specify the time after which to stop showing today's menu
-        showBreakfast: true, // Set to false to not show breakfast menus
-        showLunch: true, // Set to false to not show lunch menus
-        collapseEmptyMeals: true, // hide days with no menu data
-        lookAhead: false, // Set to true to show next week's menu when the current week ends
-        filters: {
-            breakfast: [],
-            lunch: []
-        },
-        itemTypeFilters: {
-            breakfast: [],
-            lunch: []
-        },
-        exactNameFilters: {
-            breakfast: [],
-            lunch: []
-        },
-        startsWithFilters: {
-            breakfast: [],
-            lunch: []
-        }
+        // ... other config options
     }
-}
+},
 {
     module: "MMM-MealViewer",
-    position: "top_left",
+    position: "top_right",
     config: {
         schoolId: "YourSchoolId2",
-        updateInterval: 14400000, // 4 hours, adjust as needed
-        showTodayOnly: false, // set to true if you want to see only today
-        startDay: 0, // 0 = Sunday, 1 = Monday, ..., 6 = Saturday (Ignored if showTodayOnly = true)
-        endDay: 5, // 0 = Sunday, 1 = Monday, ..., 6 = Saturday (Ignored if showTodayOnly = true)
-        maxDisplayDays: null, // Set a number of days to display, null = no limit (Ignored if showTodayOnly = true)
-        showPastDays: false, // Set to true to show previous days menus
-        hideTodayAfter: "14:00", // Specify the time after which to stop showing today's menu
-        showBreakfast: true, // Set to false to not show breakfast menus
-        showLunch: true, // Set to false to not show lunch menus
-        collapseEmptyMeals: true, // hide days with no menu data
-        lookAhead: false, // Set to true to show next week's menu when the current week ends
-        filters: {
-            breakfast: [],
-            lunch: []
-        },
-        itemTypeFilters: {
-            breakfast: [],
-            lunch: []
-        },
-        exactNameFilters: {
-            breakfast: [],
-            lunch: []
-        },
-        startsWithFilters: {
-            breakfast: [],
-            lunch: []
-        }
+        // ... other config options
     }
 }
 ```
 
 Remember to add a unique `schoolId` to each instance by following the instructions [here](#required-configuration).
+
+## Responsive Scaling
+
+The module automatically scales to fit the width of your MagicMirror region using CSS Container Queries. Place it in a narrow column and it stays compact; place it in a wider region and everything scales up proportionally.
+
+### Position-Aware Layouts
+
+The module adapts its layout based on position:
+
+| Position | Layout |
+|----------|--------|
+| `top_left`, `bottom_left` | Stacked days, left-aligned |
+| `top_right`, `bottom_right` | Stacked days, right-aligned headers, justified text |
+| `top_center`, `bottom_center` | Stacked days, centered |
+| `top_bar`, `bottom_bar` | Multi-column (days side-by-side), centered |
+| `upper_third`, `middle_center`, `lower_third` | Multi-column (days side-by-side), centered |
+| `fullscreen_above`, `fullscreen_below` | Multi-column (days side-by-side), centered |
+
+#### Right-aligned (top_right, bottom_right):
+
+<img src="screenshots/right-aligned.png" />
+
+#### Multi-column layout (full-width positions):
+
+<img src="screenshots/full-width.png" />
+
+### Browser Requirements
+
+This module uses CSS Container Queries which require a modern browser. Make sure your MagicMirror is running on Electron 105+ or a current Chromium-based browser.
+
+## Troubleshooting
+
+### Module not appearing
+- Check that the module name in `config.js` matches exactly: `"MMM-MealViewer"`
+- Verify the position is valid (e.g., `"top_left"`)
+- Check the browser console for JavaScript errors
+
+### Menus not showing
+- Verify your `schoolId` is correct
+- Check that your school has menus available on MealViewer
+- Events automatically hide 24 hours after they pass
+
+### lookAhead not working as expected
+- Look-ahead triggers after `hideTodayAfter` time on `endDay`, then continues until the next `startDay`
+- Make sure `hideTodayAfter` is set appropriately for when you want to see next week's menu
+
+## License
+
+MIT License - see [LICENSE](LICENSE) file for details.

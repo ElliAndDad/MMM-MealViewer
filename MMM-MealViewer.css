@@ -1,15 +1,37 @@
+/* MMM-MealViewer.css
+ * Responsive scaling using CSS Container Queries
+ */
+
+/* ============================================
+   BASE STYLES
+   ============================================ */
+
+/* Ensure consistent box-sizing throughout the module */
+.MMM-MealViewer *,
+.MMM-MealViewer *::before,
+.MMM-MealViewer *::after {
+    box-sizing: border-box;
+}
+
 .MMM-MealViewer .meal-viewer {
     font-family: var(--font-primary, "Roboto Condensed", sans-serif);
     font-size: 0.75em;
-    line-height: 1.2;
+    line-height: 1.3;
     text-align: left;
     width: 100%;
-    max-width: 400px;
+    container-type: inline-size;
+    container-name: meal-viewer-module;
 }
 
-.MMM-MealViewer .module-header,
-.MMM-MealViewer .day-header {
-    font-size: var(--font-size-header, 1.125em);
+/* Ensure the inner menu wrapper fills the container */
+.MMM-MealViewer .meal-viewer > div {
+    width: 100%;
+}
+
+.MMM-MealViewer .module-header {
+    display: block;
+    width: 100%;
+    font-size: 1.125em;
     font-family: var(--font-primary, "Roboto Condensed", sans-serif);
     text-transform: uppercase;
     font-weight: 400;
@@ -21,8 +43,30 @@
 }
 
 .MMM-MealViewer .day-header {
-    font-size: calc(var(--font-size-header, 1.125em) * 0.9);
-    margin-bottom: 10px;
+    display: block;
+    width: 100%;
+    font-size: 1em;
+    font-family: var(--font-primary, "Roboto Condensed", sans-serif);
+    text-transform: uppercase;
+    font-weight: 400;
+    border-bottom: 1px solid var(--color-text-dimmed, #666);
+    padding-bottom: 4px;
+    margin-bottom: 8px;
+    color: var(--color-text-dimmed, #999);
+    line-height: 1.5;
+}
+
+/* Day header parts - default inline display */
+.MMM-MealViewer .day-weekday {
+    display: inline;
+}
+
+.MMM-MealViewer .day-weekday::after {
+    content: ", ";
+}
+
+.MMM-MealViewer .day-date {
+    display: inline;
 }
 
 .MMM-MealViewer .school-logo {
@@ -32,32 +76,324 @@
     vertical-align: bottom;
 }
 
+.MMM-MealViewer .module-content {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    width: 100%;
+}
+
 .MMM-MealViewer .day-menu {
-    margin-bottom: 20px;
+    margin-bottom: 0;
+    width: 100%;
 }
 
 .MMM-MealViewer .meal-line {
-    margin: 5px 0;
+    margin: 4px 0;
     word-wrap: break-word;
     overflow-wrap: break-word;
     hyphens: auto;
 }
 
 .MMM-MealViewer .meal-line + .meal-line {
-    margin-top: 10px;
+    margin-top: 8px;
 }
 
 .MMM-MealViewer .meal-type {
     font-weight: bold;
     color: var(--color-text-bright, #fff);
 }
-.MMM-MealViewer .day-menu {
-  margin-bottom: 6px;
+
+.MMM-MealViewer .dimmed.small {
+    font-size: 0.9em;
+    color: var(--color-text-dimmed, #666);
 }
-.MMM-MealViewer .day-header {
-  font-size: 1.1rem;
-  margin-bottom: 4px;
+
+/* ============================================
+   POSITION-SPECIFIC MIN-WIDTHS
+   Order matters: full-width first, then specific positions override
+   Note: Using > .container to avoid matching nested regions
+   ============================================ */
+
+/* Full-width positions - min-width 400px */
+.region.fullscreen.above > .container .MMM-MealViewer .meal-viewer,
+.region.fullscreen.below > .container .MMM-MealViewer .meal-viewer,
+.region.top.bar > .container .MMM-MealViewer .meal-viewer,
+.region.bottom.bar > .container .MMM-MealViewer .meal-viewer,
+.region.upper.third > .container .MMM-MealViewer .meal-viewer,
+.region.middle.center > .container .MMM-MealViewer .meal-viewer,
+.region.lower.third > .container .MMM-MealViewer .meal-viewer {
+    min-width: 400px;
 }
-.MMM-MealViewer .meal-line {
-  margin: 2px 0;
+
+/* Full-width positions - multi-column layout */
+.region.fullscreen.above > .container .MMM-MealViewer .module-header,
+.region.fullscreen.below > .container .MMM-MealViewer .module-header,
+.region.top.bar > .container .MMM-MealViewer .module-header,
+.region.bottom.bar > .container .MMM-MealViewer .module-header,
+.region.upper.third > .container .MMM-MealViewer .module-header,
+.region.middle.center > .container .MMM-MealViewer .module-header,
+.region.lower.third > .container .MMM-MealViewer .module-header {
+    text-align: center;
+}
+
+.region.fullscreen.above > .container .MMM-MealViewer .module-content,
+.region.fullscreen.below > .container .MMM-MealViewer .module-content,
+.region.top.bar > .container .MMM-MealViewer .module-content,
+.region.bottom.bar > .container .MMM-MealViewer .module-content,
+.region.upper.third > .container .MMM-MealViewer .module-content,
+.region.middle.center > .container .MMM-MealViewer .module-content,
+.region.lower.third > .container .MMM-MealViewer .module-content {
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: center;
+    gap: 30px;
+}
+
+.region.fullscreen.above > .container .MMM-MealViewer .day-menu,
+.region.fullscreen.below > .container .MMM-MealViewer .day-menu,
+.region.top.bar > .container .MMM-MealViewer .day-menu,
+.region.bottom.bar > .container .MMM-MealViewer .day-menu,
+.region.upper.third > .container .MMM-MealViewer .day-menu,
+.region.middle.center > .container .MMM-MealViewer .day-menu,
+.region.lower.third > .container .MMM-MealViewer .day-menu {
+    flex: 1;
+    min-width: 0;
+    max-width: 300px;
+}
+
+.region.fullscreen.above > .container .MMM-MealViewer .day-header,
+.region.fullscreen.below > .container .MMM-MealViewer .day-header,
+.region.top.bar > .container .MMM-MealViewer .day-header,
+.region.bottom.bar > .container .MMM-MealViewer .day-header,
+.region.upper.third > .container .MMM-MealViewer .day-header,
+.region.middle.center > .container .MMM-MealViewer .day-header,
+.region.lower.third > .container .MMM-MealViewer .day-header {
+    text-align: center;
+}
+
+/* Stacked weekday/date for full-width positions */
+.region.fullscreen.above > .container .MMM-MealViewer .day-weekday,
+.region.fullscreen.below > .container .MMM-MealViewer .day-weekday,
+.region.top.bar > .container .MMM-MealViewer .day-weekday,
+.region.bottom.bar > .container .MMM-MealViewer .day-weekday,
+.region.upper.third > .container .MMM-MealViewer .day-weekday,
+.region.middle.center > .container .MMM-MealViewer .day-weekday,
+.region.lower.third > .container .MMM-MealViewer .day-weekday {
+    display: block;
+}
+
+.region.fullscreen.above > .container .MMM-MealViewer .day-weekday::after,
+.region.fullscreen.below > .container .MMM-MealViewer .day-weekday::after,
+.region.top.bar > .container .MMM-MealViewer .day-weekday::after,
+.region.bottom.bar > .container .MMM-MealViewer .day-weekday::after,
+.region.upper.third > .container .MMM-MealViewer .day-weekday::after,
+.region.middle.center > .container .MMM-MealViewer .day-weekday::after,
+.region.lower.third > .container .MMM-MealViewer .day-weekday::after {
+    content: "";
+}
+
+.region.fullscreen.above > .container .MMM-MealViewer .day-date,
+.region.fullscreen.below > .container .MMM-MealViewer .day-date,
+.region.top.bar > .container .MMM-MealViewer .day-date,
+.region.bottom.bar > .container .MMM-MealViewer .day-date,
+.region.upper.third > .container .MMM-MealViewer .day-date,
+.region.middle.center > .container .MMM-MealViewer .day-date,
+.region.lower.third > .container .MMM-MealViewer .day-date {
+    display: block;
+}
+
+/* Center column positions - min-width 300px */
+.region.top.center .MMM-MealViewer .meal-viewer,
+.region.bottom.center .MMM-MealViewer .meal-viewer {
+    min-width: 300px;
+}
+
+/* Left positions - min-width 322px */
+.region.top.left .MMM-MealViewer .meal-viewer,
+.region.bottom.left .MMM-MealViewer .meal-viewer {
+    min-width: 322px;
+}
+
+/* Right positions - min-width 267px */
+.region.top.right .MMM-MealViewer .meal-viewer,
+.region.bottom.right .MMM-MealViewer .meal-viewer {
+    min-width: 267px;
+}
+
+/* Right positions - text alignment */
+.region.top.right .MMM-MealViewer .module-header,
+.region.bottom.right .MMM-MealViewer .module-header,
+.region.top.right .MMM-MealViewer .day-header,
+.region.bottom.right .MMM-MealViewer .day-header {
+    text-align: right;
+}
+
+.region.top.right .MMM-MealViewer .meal-line,
+.region.bottom.right .MMM-MealViewer .meal-line {
+    text-align: justify;
+}
+
+/* ============================================
+   RESPONSIVE SCALING - Container Queries
+   ============================================ */
+
+/* Scale 1.15x - Slightly wider columns (250px+) */
+@container meal-viewer-module (min-width: 250px) {
+    .MMM-MealViewer .module-header {
+        font-size: 1.29em;
+        padding-bottom: 6px;
+        margin-bottom: 17px;
+    }
+
+    .MMM-MealViewer .day-header {
+        font-size: 1.15em;
+        padding-bottom: 5px;
+        margin-bottom: 9px;
+    }
+
+    .MMM-MealViewer .school-logo {
+        width: 35px;
+        margin-right: 12px;
+    }
+
+    .MMM-MealViewer .module-content {
+        gap: 14px;
+    }
+
+    .MMM-MealViewer .meal-line {
+        margin: 5px 0;
+    }
+
+    .MMM-MealViewer .meal-line + .meal-line {
+        margin-top: 9px;
+    }
+}
+
+/* Scale 1.3x - Medium columns (320px+) */
+@container meal-viewer-module (min-width: 320px) {
+    .MMM-MealViewer .module-header {
+        font-size: 1.46em;
+        padding-bottom: 7px;
+        margin-bottom: 20px;
+    }
+
+    .MMM-MealViewer .day-header {
+        font-size: 1.3em;
+        padding-bottom: 5px;
+        margin-bottom: 10px;
+    }
+
+    .MMM-MealViewer .school-logo {
+        width: 39px;
+        margin-right: 13px;
+    }
+
+    .MMM-MealViewer .module-content {
+        gap: 16px;
+    }
+
+    .MMM-MealViewer .meal-line {
+        margin: 5px 0;
+    }
+
+    .MMM-MealViewer .meal-line + .meal-line {
+        margin-top: 10px;
+    }
+}
+
+/* Scale 1.5x - Wide columns (400px+) */
+@container meal-viewer-module (min-width: 400px) {
+    .MMM-MealViewer .module-header {
+        font-size: 1.69em;
+        padding-bottom: 8px;
+        margin-bottom: 23px;
+    }
+
+    .MMM-MealViewer .day-header {
+        font-size: 1.5em;
+        padding-bottom: 6px;
+        margin-bottom: 12px;
+    }
+
+    .MMM-MealViewer .school-logo {
+        width: 45px;
+        margin-right: 15px;
+    }
+
+    .MMM-MealViewer .module-content {
+        gap: 18px;
+    }
+
+    .MMM-MealViewer .meal-line {
+        margin: 6px 0;
+    }
+
+    .MMM-MealViewer .meal-line + .meal-line {
+        margin-top: 12px;
+    }
+}
+
+/* Scale 1.75x - Very wide columns (500px+) */
+@container meal-viewer-module (min-width: 500px) {
+    .MMM-MealViewer .module-header {
+        font-size: 1.97em;
+        padding-bottom: 9px;
+        margin-bottom: 26px;
+    }
+
+    .MMM-MealViewer .day-header {
+        font-size: 1.75em;
+        padding-bottom: 7px;
+        margin-bottom: 14px;
+    }
+
+    .MMM-MealViewer .school-logo {
+        width: 53px;
+        margin-right: 18px;
+    }
+
+    .MMM-MealViewer .module-content {
+        gap: 21px;
+    }
+
+    .MMM-MealViewer .meal-line {
+        margin: 7px 0;
+    }
+
+    .MMM-MealViewer .meal-line + .meal-line {
+        margin-top: 14px;
+    }
+}
+
+/* Scale 2x - Extra wide / full-width (620px+) */
+@container meal-viewer-module (min-width: 620px) {
+    .MMM-MealViewer .module-header {
+        font-size: 2.25em;
+        padding-bottom: 10px;
+        margin-bottom: 30px;
+    }
+
+    .MMM-MealViewer .day-header {
+        font-size: 2em;
+        padding-bottom: 8px;
+        margin-bottom: 16px;
+    }
+
+    .MMM-MealViewer .school-logo {
+        width: 60px;
+        margin-right: 20px;
+    }
+
+    .MMM-MealViewer .module-content {
+        gap: 24px;
+    }
+
+    .MMM-MealViewer .meal-line {
+        margin: 8px 0;
+    }
+
+    .MMM-MealViewer .meal-line + .meal-line {
+        margin-top: 16px;
+    }
 }

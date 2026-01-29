@@ -195,7 +195,26 @@ Module.register("MMM-MealViewer", {
 
                 var dateElem = document.createElement("div");
                 dateElem.className = "day-header";
-                dateElem.textContent = day.date.toUpperCase();
+                
+                // Split date into weekday and date parts for flexible CSS styling
+                // day.date format is "Monday, February 2"
+                const dateParts = day.date.split(", ");
+                if (dateParts.length >= 2) {
+                    const weekdaySpan = document.createElement("span");
+                    weekdaySpan.className = "day-weekday";
+                    weekdaySpan.textContent = dateParts[0].toUpperCase();
+                    
+                    const dateSpan = document.createElement("span");
+                    dateSpan.className = "day-date";
+                    dateSpan.textContent = dateParts.slice(1).join(", ").toUpperCase();
+                    
+                    dateElem.appendChild(weekdaySpan);
+                    dateElem.appendChild(dateSpan);
+                } else {
+                    // Fallback if format is unexpected
+                    dateElem.textContent = day.date.toUpperCase();
+                }
+                
                 dayMenu.appendChild(dateElem);
 
                 if (this.config.showBreakfast && hasBreakfast) {

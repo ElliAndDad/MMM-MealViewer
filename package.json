@@ -1,35 +1,35 @@
 {
-    "name": "mmm-mealviewer",
-    "version": "1.1.0",
-    "description": "MagicMirror module to display school meal menus using MealViewer API",
-    "main": "MMM-MealViewer.js",
-    "scripts": {
-        "lint": "eslint .",
-        "lint:fix": "eslint . --fix"
-    },
-    "repository": {
-        "type": "git",
-        "url": "git+https://github.com/ElliAndDad/MMM-MealViewer.git"
-    },
-    "keywords": [
-        "magicmirror",
-        "module",
-        "mealviewer",
-        "school",
-        "menu"
-    ],
-    "author": "ElliAndDad",
-    "license": "MIT",
-    "bugs": {
-        "url": "https://github.com/ElliAndDad/MMM-MealViewer/issues"
-    },
-    "homepage": "https://github.com/ElliAndDad/MMM-MealViewer/#readme",
-    "devDependencies": {
-        "@eslint/js": "^9.0.0",
-        "eslint": "^9.0.0",
-        "globals": "^17.2.0"
-    },
-    "engines": {
-        "node": ">=18.0.0"
-    }
+  "name": "mmm-mealviewer",
+  "version": "1.1.0",
+  "description": "MagicMirror module to display school meal menus using MealViewer API",
+  "main": "MMM-MealViewer.js",
+  "scripts": {
+    "lint": "eslint",
+    "lint:fix": "eslint --fix"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ElliAndDad/MMM-MealViewer.git"
+  },
+  "keywords": [
+    "magicmirror",
+    "module",
+    "mealviewer",
+    "school",
+    "menu"
+  ],
+  "author": "ElliAndDad",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ElliAndDad/MMM-MealViewer/issues"
+  },
+  "homepage": "https://github.com/ElliAndDad/MMM-MealViewer/#readme",
+  "devDependencies": {
+    "@eslint/js": "^9.0.0",
+    "eslint": "^9.0.0",
+    "globals": "^17.2.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
 }

@@ -19,7 +19,7 @@ A MagicMirror module for displaying school breakfast and lunch menus from MealVi
 
 ### Single instance
 
-<img src="screenshots/single.png" />
+<img src="screenshots/a-single.png" />
 
 ### Multiple instances
 

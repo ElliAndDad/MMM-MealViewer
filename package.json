@@ -1,6 +1,7 @@
 {
   "name": "mmm-mealviewer",
   "version": "1.1.0",
+  "type": "commonjs",
   "description": "MagicMirror module to display school meal menus using MealViewer API",
   "main": "MMM-MealViewer.js",
   "scripts": {
@@ -25,8 +26,8 @@
   },
   "homepage": "https://github.com/ElliAndDad/MMM-MealViewer/#readme",
   "devDependencies": {
-    "@eslint/js": "^9.0.0",
-    "eslint": "^9.0.0",
+    "@eslint/js": "^9.39.2",
+    "eslint": "^9.39.2",
     "globals": "^17.2.0"
   },
   "engines": {

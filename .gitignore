@@ -89,9 +89,6 @@ ehthumbs.db
 # Visual Studio Code
 .vscode/*
 !.vscode/settings.json
-!.vscode/tasks.json
-!.vscode/launch.json
-!.vscode/extensions.json
 
 # Specific to this project
 mealData.json

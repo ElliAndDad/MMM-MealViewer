@@ -13,6 +13,9 @@ A MagicMirror module for displaying school breakfast and lunch menus from MealVi
     - [Filters](#filters)
     - [Configuration for Multiple School Menus](#configuration-for-multiple-school-menus)
 - [Responsive Scaling](#responsive-scaling) *(new in v1.1.0)*
+- [Troubleshooting](#troubleshooting)
+- [Contributing](#contributing)
+- [License](#license)
 
 
 ## Screenshots
@@ -28,13 +31,11 @@ A MagicMirror module for displaying school breakfast and lunch menus from MealVi
 ## Installation
 
 1\. Navigate to your MagicMirror's `modules` directory:
-
 ```bash
 cd ~/MagicMirror/modules/
 ```
 
 2\. Clone this repository:
-
 ```bash
 git clone https://github.com/ElliAndDad/MMM-MealViewer.git
 ```
@@ -46,13 +47,11 @@ That's it! No additional dependencies required.
 To update the module to the latest version:
 
 1\. Navigate to the module folder:
-
 ```bash
 cd ~/MagicMirror/modules/MMM-MealViewer
 ```
 
 2\. Pull the latest changes:
-
 ```bash
 git pull
 ```
@@ -62,7 +61,6 @@ git pull
 ## Configuration
 
 Add the following to your `config.js` file:
-
 ```javascript
 {
     module: "MMM-MealViewer",
@@ -273,7 +271,6 @@ Would exclude "Garden Bar Tomatoes", "Garden Bar Lettuce", etc.
 To display menus for multiple schools on your MagicMirror, you can add multiple instances of the MMM-MealViewer module to your config file.
 
 Here's an example configuration for displaying menus from two different schools:
-
 ```javascript
 {
     module: "MMM-MealViewer",
@@ -339,6 +336,20 @@ This module uses CSS Container Queries which require a modern browser. Make sure
 ### lookAhead not working as expected
 - Look-ahead triggers after `hideTodayAfter` time on `endDay`, then continues until the next `startDay`
 - Make sure `hideTodayAfter` is set appropriately for when you want to see next week's menu
+
+## Contributing
+
+1. Fork and clone the repository
+2. Install dev dependencies:
+```bash
+   npm install
+```
+3. Make your changes
+4. Run the linter before committing:
+```bash
+   npm run lint:fix
+```
+5. Submit a pull request
 
 ## License
 
